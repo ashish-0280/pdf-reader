@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for
 import os
 import fitz  # PyMuPDF
-import pyttsx3
+from gtts import gTTS
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -13,11 +13,9 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(AUDIO_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
@@ -25,7 +23,6 @@ def upload_pdf():
         return 'No file part'
 
     file = request.files['pdf_file']
-
     if file.filename == '':
         return 'No selected file'
 
@@ -41,15 +38,11 @@ def upload_pdf():
         for page in doc:
             full_text += page.get_text()
 
-        # Convert text to speech using pyttsx3 (offline)
-        engine = pyttsx3.init()
-        engine.setProperty('rate', 150)
-
-        audio_filename = 'output.wav'  # ✅ use .wav
+        # Convert to speech using gTTS
+        tts = gTTS(full_text)
+        audio_filename = 'output.mp3'
         audio_path = os.path.join(AUDIO_FOLDER, audio_filename)
-
-        engine.save_to_file(full_text, audio_path)
-        engine.runAndWait()
+        tts.save(audio_path)
 
         return render_template(
             "reader.html",
@@ -58,7 +51,6 @@ def upload_pdf():
         )
 
     return 'Invalid file format'
-
 
 if __name__ == '__main__':
     app.run(debug=True)
