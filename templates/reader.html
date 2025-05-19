@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDF Audio Reader</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <header class="bg-blue-600 text-white text-center text-2xl py-4 font-bold">
+    PDF Audio Reader
+  </header>
+
+  <div class="grid grid-cols-2 gap-4 p-4">
+    <!-- PDF Viewer -->
+    <div class="bg-white p-4 rounded shadow h-screen overflow-auto">
+      <h2 class="text-lg font-semibold mb-2">PDF View</h2>
+      <iframe src="{{ pdf_url }}" class="w-full h-[90%] border" frameborder="0"></iframe>
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="bg-white p-4 rounded shadow h-screen overflow-auto">
+      <h2 class="text-lg font-semibold mb-4">Audio Controls</h2>
+
+      <audio id="audioPlayer" controls class="w-full">
+        <source src="{{ audio_url }}" type="audio/wav">
+        Your browser does not support the audio element.
+      </audio>
+
+      <div class="flex justify-around mt-2">
+        <button onclick="document.getElementById('audioPlayer').play()" class="bg-green-500 text-white px-3 py-1 rounded">Play</button>
+        <button onclick="document.getElementById('audioPlayer').pause()" class="bg-yellow-500 text-white px-3 py-1 rounded">Pause</button>
+        <button onclick="document.getElementById('audioPlayer').currentTime = 0" class="bg-blue-500 text-white px-3 py-1 rounded">Replay</button>
+        <button onclick="document.getElementById('audioPlayer').currentTime -= 10" class="bg-purple-500 text-white px-3 py-1 rounded"><< 10s</button>
+        <button onclick="document.getElementById('audioPlayer').currentTime += 10" class="bg-purple-500 text-white px-3 py-1 rounded">10s >></button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
